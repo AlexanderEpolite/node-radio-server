@@ -66,6 +66,15 @@
                         audio.src = `${cdn}${song}`;
                     audio.volume = 0;
                     audio.play();
+                    audio.addEventListener("ended", () => {
+                        if(ws.readyState === WebSocket.CLOSED) {
+                            ws = new WebSocket(`ws${window.isSecureContext ? "s" : ""}://${document.location.host}/`);
+                            ws.binaryType = "arraybuffer";
+                            ws.onopen = function() {
+                                console.log("Connected to server");
+                            };
+                        }
+                    });
                 } else if(data.startsWith("Current-Song: ")) {
                     song = data.substring(14);
                     console.log(song);

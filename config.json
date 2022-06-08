@@ -32,7 +32,7 @@
             "##": "while this is better than sending 1MB worth of content through a websocket, it requires more setup.",
             "###": "You must have a list of songs relative to the url_base below, formatted one song per line in songs.txt in the url_base directory.",
             "####": "Use the createRemoteResourceFile.js file to auto-generate the songs.txt file.",
-            "url_base": "https://cdn.example.com/music/",
+            "url_base": "https://example.com/music/",
             "allow_invalid_cert": false
         },
         "local": {
