@@ -1,5 +1,4 @@
 
-Node Radio Server; allows you to share audio between multiple people in-sync over Internet protocol.  See README.md for more information.
 Copyright (C) 2022 Alexander Epolite
 
                     GNU AFFERO GENERAL PUBLIC LICENSE
