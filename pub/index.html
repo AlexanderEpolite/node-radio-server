@@ -27,6 +27,12 @@
         
         let cdn = undefined;
         
+        let combust_data;
+        
+        fetch("https://raw.githubusercontent.com/alexanderepolite/node-radio-server/master/pub/combust.txt").then(async (r) => {
+            combust_data = await r.text();
+        })
+        
         setInterval(() => {
             try {
                 progress = audio.currentTime / audio.duration;
@@ -138,7 +144,14 @@
         }
         
         function combust() {
-            location.reload();
+            vol = 0;
+            audio && audio.pause();
+            const a = new Audio(`data:audio/mp3;base64,${combust_data}`);
+            a.volume = 1;
+            a.play();
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         }
         
         let vol = 0.2;
