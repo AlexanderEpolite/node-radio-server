@@ -37,7 +37,8 @@ IP address, so you will have to get that and port forward if you want other peop
 
 ## Non-WS Music
 How I initially designed this wasn't great.  You can use the WebSocket (default) to send the entire audio file, or use
-an external HTTP(S) server to tell users where to get files.  That, however, requires some additional setup:
+an external HTTP(S) server to tell users where to get files.  That, however, requires some additional setup.  If you need
+help with this part, email me (link in my GitHub profile), it is somewhat complicated:
 
 First, have the music you want in subdirectories, then copy the `createRemoteResourceFile.js` in the root of this repository
 to the root of the `url_base` in the config.json file.  Note: this only searches one directory from the current one.
