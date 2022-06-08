@@ -110,7 +110,7 @@ const server = new WebSocketServer({
     server: http_server,
 });
 
-http_server.listen(55392);
+http_server.listen(config.server.port);
 
 console.log(`server started`);
 
