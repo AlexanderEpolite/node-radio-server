@@ -1,14 +1,14 @@
 {
   "name": "radio-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A customizable NodeJS online radio using WebSockets or a CDN",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Alexander Epolite <alexander@epolite.net>",
+  "license": "See LICENSE.txt",
   "devDependencies": {
     "@types/node": "^17.0.40",
     "@types/node-fetch": "^2.6.1",
@@ -20,5 +20,12 @@
     "serverline": "^1.6.0",
     "tslib": "^2.4.0",
     "ws": "^8.7.0"
-  }
+  },
+  "maintainers": [
+    {
+      "url": "https://epolite.net",
+      "name": "Alexander Epolite",
+      "email": "alexander@epolite.net"
+    }
+  ]
 }
