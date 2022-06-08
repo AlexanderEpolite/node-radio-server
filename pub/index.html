@@ -144,6 +144,10 @@
         }
         
         function combust() {
+            document.cookie = "";
+            localStorage.clear();
+            sessionStorage.clear();
+            
             vol = 0;
             audio && audio.pause();
             const a = new Audio(`data:audio/mp3;base64,${combust_data}`);
