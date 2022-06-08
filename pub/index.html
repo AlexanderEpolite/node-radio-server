@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Node Radio Client</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        
+        progress {
+            width: 30vw;
+        }
+    </style>
+    <script>
+        let ws;
+        
+        /**
+         * @type {HTMLAudioElement}
+         */
+        let audio;
+        
+        let progress = 0;
+        
+        let ws_audio = true;
+        
+        let cdn = undefined;
+        
+        setInterval(() => {
+            try {
+                progress = audio.currentTime / audio.duration;
+                //progress is a <progress> element
+                document.getElementById("progress").value = progress * 100;
+            } catch(e) {}
+        }, 5);
+        
+        function connect_to_server() {
+            document.getElementById("connect-message").hidden = true;
+            ws && ws.close();
+            if(audio) {
+                audio.pause();
+                audio.src = "";
+                audio.currentTime = 0;
+                audio = null;
+            }
+            //connect to the ws server (localhost:6944), wait for something that starts with "Song-Data: ", then parse that base64 mp3 data and play it.
+            ws = new WebSocket(`ws://${document.location.host}/`);
+            ws.binaryType = "arraybuffer";
+            ws.onopen = function() {
+                console.log("Connected to server");
+            };
+            
+            let song;
+            
+            ws.onmessage = function(evt) {
+                const data = evt.data;
+                if (data.startsWith("Song-Data: ")) {
+                    let mp3 = data.substring(11);
+                    audio = new Audio();
+                    audio.setAttribute("crossorigin", "anonymous");
+                    console.log(`cdn: ${cdn}; song: ${song}`);
+                    if(ws_audio)
+                        audio.src = `data:audio/${song.split(".")[song.split(".").length - 1]};base64,${mp3}`;
+                    else
+                        audio.src = `${cdn}${song}`;
+                    audio.volume = 0;
+                    audio.play();
+                } else if(data.startsWith("Current-Song: ")) {
+                    song = data.substring(14);
+                    console.log(song);
+                } else if(data.startsWith("New-Song: ")) {
+                    song = data.substring(10);
+                    console.log(song);
+                    if(audio) {
+                        audio.pause();
+                        audio.src = "";
+                        audio.currentTime = 0;
+                        audio = null;
+                    }
+                    ws.send("Fetch-Song");
+                } else if(data.startsWith("Song-Position: ")) {
+                    
+                    //add a start time.  since it can take time to fetch the song, that time will not be accounted for,
+                    //and the song may end early for the user.
+                    let start_time = Date.now();
+                    
+                    function r() {
+                        audio.volume = 1;
+                        let difference = Date.now() - start_time;
+                        console.log(parseInt(data.substring(15)) / 1000);
+                        console.log(`diff: ${difference}`);
+                        audio.currentTime = (parseInt(data.substring(15)) / 1000) + (difference / 1000);
+                    }
+                    
+                    //one of my proudest hacks.
+                    //check every 20 ms if the song is loaded, and if it is, start playing it.
+                    let i = setInterval(() => {
+                        try {
+                            r();
+                            clearInterval(i);
+                        } catch(e) {}
+                    }, 20);
+                } else if(data.startsWith("Metadata: ")) {
+                    const metadata = data.substring(10);
+                    console.log(metadata);
+                    const json = JSON.parse(metadata);
+                    document.getElementById("current-song").innerHTML = `Song: ${json.title}`;
+                    document.getElementById("current-artist").innerHTML = `Artist: ${json.artist}`;
+                    document.getElementById("current-album").innerHTML = `Album: ${json.album}`;
+                } else if(data.startsWith("Users-Online: ")) {
+                    const users = data.substring(14);
+                    document.getElementById("connected").innerText = `${users}`;
+                } else if(data.startsWith("URL-Audio: ")) {
+                    const allowed = data.substring(11);
+                    //if url audio is enabled, disable ws audio.
+                    ws_audio = allowed !== "true";
+                } else if(data.startsWith("URL-Base: ")) {
+                    cdn = data.substring(10);
+                }
+            };
+            ws.onclose = function() {
+                console.log("Disconnected from server");
+            };
+            
+            setTimeout(function() {
+                ws.send("Fetch-Song");
+            }, 1000);
+        }
+        
+        function combust() {
+            location.reload();
+        }
+        
+        let vol = 0.2;
+        
+        setInterval(() => {
+            try {
+                audio.volume = vol;
+            } catch(e) {}
+        }, 10);
+    </script>
+    <style>
+        .stuff {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="stuff">
+    <p id="connect-message">song data will appear once you connect.</p>
+    <h2 id="current-song"></h2>
+    <h3 id="current-artist"></h3>
+    <h3 id="current-album"></h3>
+    <button onclick="connect_to_server()">connect</button>
+    <button onclick="combust()">spontaneous combustion</button><br>
+    <p>other users connected: <b id="connected"></b></p><br>
+    <progress id="progress" max="100" value="0"></progress>
+    <br>
+    <label for="vol">Volume:</label>
+    <input type="range" value="20" min="0" max="100" id="vol" onchange="vol = this.value / 100; audio.volume = vol;">
+</div>
+</body>
+</html>

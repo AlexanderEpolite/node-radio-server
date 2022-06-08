@@ -1,0 +1,45 @@
+{
+    "#": "for help, visit the wiki on the github repo: https://github.com/alexanderepolite/node-radio-server/",
+    "server": {
+        "port": 55392,
+        "host": "localhost",
+        "encryption": {
+            "enabled": false,
+            "key_path": "./ssl/key.pem",
+            "cert_path": "./ssl/cert.pem"
+        },
+        "auth": {
+            "enabled": false,
+            "username": "",
+            "password_sha512": ""
+        }
+    },
+    "music": {
+        "#": "allowed filetypes may not work depending on what browsers accept.",
+        "##": "more info: https://en.wikipedia.org/wiki/HTML5_audio",
+        "###": "if unsure, use mp3 for greatest compatibility.",
+        "####": "If using a remote library, these filters will filter through remote songs.",
+        "allowed_filetypes": [
+            "mp3",
+            "ogg"
+        ],
+        "method": {
+            "#": "true to have users fetch from a separate server, false to send the data through the websocket.",
+            "url": false
+        },
+        "media_url": {
+            "#": "only used if `url` in the above `method` object is enabled.",
+            "##": "while this is better than sending 1MB worth of content through a websocket, it requires more setup.",
+            "###": "You must have a list of songs relative to the url_base below, formatted one song per line in songs.txt in the url_base directory.",
+            "####": "Use the createRemoteResourceFile.js file to auto-generate the songs.txt file.",
+            "url_base": "https://cdn.example.com/music/",
+            "allow_invalid_cert": false
+        },
+        "local": {
+            "#": "only used if the `url` method is disabled.  Windows users must use C:\\Users\\your-username\\Music\\",
+            "path": "~/Music/"
+        },
+        "#####": "Do not allow the same song to be played twice in a row.",
+        "no_duplicates": true
+    }
+}
