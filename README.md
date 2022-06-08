@@ -49,6 +49,11 @@ Third, have an HTTP server point to this directory that can serve the songs.txt 
 
 Lastly, make sure you enable the URL method in the config file, else it will continue to use the WebSocket method.
 
+## WS Music
+
+If you are going to send music through the WebSocket, please note that it sends the ENTIRE file.  Please reduce
+the bitrate of your music if it is lagging or starting a few seconds in.
+
 ## Questions?
 
 Make an issue on the GitHub repository, I will try to respond quickly.
