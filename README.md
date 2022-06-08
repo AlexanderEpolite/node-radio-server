@@ -1,6 +1,6 @@
 # Node Radio Server
 
-### Want to listen along to your music with friends but don't want to subscribe to a certain music service?
+## Want to listen along to your music with friends but don't want to subscribe to a certain brand-name music service?
 
 This is a simple NodeJS app that allows you to host a server people can connect to and all have the same music playing
 at the same time.
