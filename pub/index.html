@@ -45,7 +45,7 @@
                 audio = null;
             }
             //connect to the ws server (localhost:6944), wait for something that starts with "Song-Data: ", then parse that base64 mp3 data and play it.
-            ws = new WebSocket(`wss://${document.location.host}/`);
+            ws = new WebSocket(`ws${window.isSecureContext ? "s" : ""}://${document.location.host}/`);
             ws.binaryType = "arraybuffer";
             ws.onopen = function() {
                 console.log("Connected to server");
