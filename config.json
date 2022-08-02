@@ -1,5 +1,5 @@
 {
-    "#": "for help, visit the wiki on the github repo: https://github.com/alexanderepolite/node-radio-server/",
+    "#": "for help, make an issue on GitHub or contact me on session: https://epolite.net/session.txt",
     "server": {
         "port": 55392,
         "host": "localhost",
